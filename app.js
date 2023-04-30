@@ -54,6 +54,9 @@ class Server {
       req.on('end', () => {
         console.log(curso);
         console.log(typeof curso);
+        curso = JSON.parse(curso);
+        console.log(curso.CapacidadEstudiantes);
+
         res.end(`El servidor recibió una solicitud para ingresar un curso de programación.`);
       });
     }
@@ -68,5 +71,4 @@ class Server {
 
 server = new Server();
 server.listen();
-
 
