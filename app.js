@@ -1,12 +1,16 @@
+// I m p o r t a c i o n e s
 const { cursos } = require('./cursos.js');
 const http = require('http');
 
+
+// S e r v i d o r.
 class Server {
   constructor() {
     this.port = 9999;
     this.server = http.createServer(this.servidor.bind(this));
   }
 
+  // Metodo para manejar las solicitudes H T T P
   servidor(req, res) {
     const { method } = req;
     switch (method) {
@@ -20,6 +24,7 @@ class Server {
     }
   }
 
+  //Manejo de H T T P -- G E T
   manejarSolicitudGet(req, res) {
     const path = req.url;
     if (path === '/') {
@@ -40,6 +45,7 @@ class Server {
     }
   }
 
+  //Manejo de H T T P -- P O S T
   manejarSolicitudPost(req, res) {
     const path = req.url;
     if (path === '/cursos/programacion') {
@@ -62,6 +68,7 @@ class Server {
     }
   }
 
+  //Llamado al servidor ( E S C U C H A ).
   listen() {
     this.server.listen(this.port, () => {
       console.log(`El servidor está escuchando en el puerto ${this.port}.`);
@@ -69,6 +76,7 @@ class Server {
   }
 }
 
+//Inicio una instancia de la clase S e r v e r.
 server = new Server();
+//Llamo a el metodo e s c u c h a...
 server.listen();
-
