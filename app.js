@@ -1,62 +1,72 @@
 const { cursos } = require('./cursos.js');
-
 const http = require('http');
-const puerto = 9999;
 
-const servidor = http.createServer((req,res)=>{
+class Server {
+  constructor() {
+    this.port = 9999;
+    this.server = http.createServer(this.servidor.bind(this));
+  }
+
+  servidor(req, res) {
     const { method } = req;
     switch (method) {
-        case 'GET':
-            return manejarSolicitudGet(req,res);
-        case 'POST':
-            return manejarSolicitudPost(req,res);
-        default:
-            res.statusCode = 501;
-            res.end(`El methodo ==> ${method} usado no puede ser manejado por el servidor..`);
+      case 'GET':
+        return this.manejarSolicitudGet(req, res);
+      case 'POST':
+        return this.manejarSolicitudPost(req, res);
+      default:
+        res.statusCode = 501;
+        res.end(`El método ${method} usado no puede ser manejado por el servidor.`);
     }
-});
+  }
 
-const manejarSolicitudGet = (req,res) => {
+  manejarSolicitudGet(req, res) {
     const path = req.url;
-    if(path === '/'){
-        res.statusCode = 200;
-        return res.end(`welcome to my server and api built with node.js`);
-    }else if(path === '/cursos'){
-        res.statusCode = 200;
-        return res.end(JSON.stringify(cursos));
-    }else if(path === '/cursos/programacion') {
-        res.statusCode = 200;
-        return res.end(JSON.stringify(cursos.programacion));
-    }else if(path === '/cursos/matematicas') {
-        res.statusCode = 200;
-        return res.end(JSON.stringify(cursos.Mtematicas));
+    if (path === '/') {
+      res.statusCode = 200;
+      return res.end('Welcome to my server and API built with Node.js');
+    } else if (path === '/cursos') {
+      res.statusCode = 200;
+      return res.end(JSON.stringify(cursos));
+    } else if (path === '/cursos/programacion') {
+      res.statusCode = 200;
+      return res.end(JSON.stringify(cursos.programacion));
+    } else if (path === '/cursos/matematicas') {
+      res.statusCode = 200;
+      return res.end(JSON.stringify(cursos.Mtematicas));
     } else {
-        res.statusCode = 404;
-        return res.end('Lo siento la url ue estas buscando en mi servidor no puedo manejarla o no existe por el momento...');
+      res.statusCode = 404;
+      return res.end('Lo siento, la URL que estás buscando en mi servidor no puede ser manejada o no existe por el momento.');
     }
-};
+  }
 
-const manejarSolicitudPost = (req,res) => {
+  manejarSolicitudPost(req, res) {
     const path = req.url;
-    if(path === '/cursos/programacion') {
-        res.statusCode = 200;
+    if (path === '/cursos/programacion') {
+      res.statusCode = 200;
 
-        let curso = '';
+      let curso = '';
 
-        req.on('data',(informacion)=>{
-            curso += informacion.toString();
-        });
+      req.on('data', (informacion) => {
+        curso += informacion.toString();
+      });
 
-        req.on('end',()=>{
-            console.log(curso);
-            console.log(typeof curso);
-            res.end(`El servidor resivio una solicitud para ingresar un curso de programacion;`);
-        });
-
-        // return res.end(`El servidor resivio una solicitud para ingresar un curso de programacion;`);
+      req.on('end', () => {
+        console.log(curso);
+        console.log(typeof curso);
+        res.end(`El servidor recibió una solicitud para ingresar un curso de programación.`);
+      });
     }
-};
+  }
 
-servidor.listen(puerto,()=>{
-    console.log(`El servidor esta escuchando en el puerto ${puerto}...`);
-})
+  listen() {
+    this.server.listen(this.port, () => {
+      console.log(`El servidor está escuchando en el puerto ${this.port}.`);
+    });
+  }
+}
+
+server = new Server();
+server.listen();
+
+
