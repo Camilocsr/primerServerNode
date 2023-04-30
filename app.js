@@ -40,7 +40,20 @@ const manejarSolicitudPost = (req,res) => {
     const path = req.url;
     if(path === '/cursos/programacion') {
         res.statusCode = 200;
-        return res.end(`El servidor resivio una solicitud para ingresar un curso de programacion;`);
+
+        let curso = '';
+
+        req.on('data',(informacion)=>{
+            curso += informacion.toString();
+        });
+
+        req.on('end',()=>{
+            console.log(curso);
+            console.log(typeof curso);
+            res.end(`El servidor resivio una solicitud para ingresar un curso de programacion;`);
+        });
+
+        // return res.end(`El servidor resivio una solicitud para ingresar un curso de programacion;`);
     }
 };
 

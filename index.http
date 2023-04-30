@@ -1,1 +1,6 @@
-POST http://localhost:9999/cursos/programacion
+POST http://localhost:9999/cursos/programacion HTTP/1.1
+Content-Type: application/json
+
+{
+    "titulo":"perro"
+}
