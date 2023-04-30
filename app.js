@@ -11,7 +11,8 @@ const servidor = http.createServer((req,res)=>{
         case 'POST':
             return manejarSolicitudPost(req,res);
         default:
-            console.log(`El methodo ==> ${method} usado no puede ser manejado por el servidor..`);
+            res.statusCode = 501;
+            res.end(`El methodo ==> ${method} usado no puede ser manejado por el servidor..`);
     }
 });
 
